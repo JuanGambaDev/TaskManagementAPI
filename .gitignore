@@ -16,6 +16,9 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# Ignore files of local configuration
+appsettings.Development.json
+
 # Mono auto generated files
 mono_crash.*
 
@@ -483,5 +486,3 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-# Ignore files of local configuration
-appsettings.Development.json
