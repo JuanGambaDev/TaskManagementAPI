@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddNpgsql<TaskManagementContext>(builder.Configuration.GetConnectionString("TaskManagementDb"));
+builder.Services.AddScoped<ITaskService,TaskService>();
 
 var app = builder.Build();
 
