@@ -19,19 +19,29 @@ namespace TaskManagementAPI
             return await _taskManagementContext.Tasks.ToListAsync();
         }
 
-        public async Task<Task> Save(Task taskNew)
+        public async Task<Task> Save(TaskView taskNew)
         {
-            taskNew.IdTask = Guid.NewGuid();
-            taskNew.CreationDate = DateTime.UtcNow;
+            var taskToSave = new Task()
+            {
+                Name = taskNew.Name,
+                Description = taskNew.Description,
+                Icon = taskNew.Icon,
+                Status = taskNew.Status,
+                Deadline = taskNew.Deadline
+            };
+
+
+            taskToSave.IdTask = Guid.NewGuid();
+            taskToSave.CreationDate = DateTime.UtcNow;
 
             using (var transaction = await _taskManagementContext.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    await _taskManagementContext.Tasks.AddAsync(taskNew);
+                    await _taskManagementContext.Tasks.AddAsync(taskToSave);
                     await _taskManagementContext.SaveChangesAsync();
                     await transaction.CommitAsync();
-                    return taskNew;
+                    return taskToSave;
                 }
                 catch (Exception ex)
                 {
@@ -41,7 +51,7 @@ namespace TaskManagementAPI
             }
         }
 
-        public async Task<Task> Update(Guid id, Task updatedTask)
+        public async Task<Task> Update(Guid id, TaskView updatedTask)
         {
             using (var transaction = await _taskManagementContext.Database.BeginTransactionAsync())
             {
@@ -74,7 +84,7 @@ namespace TaskManagementAPI
             }
         }
 
-        public async void Remove(Guid id)
+        public async Task<Task> Remove(Guid id)
         {
             using (var transaction = await _taskManagementContext.Database.BeginTransactionAsync())
             {
@@ -87,6 +97,7 @@ namespace TaskManagementAPI
                         _taskManagementContext.Tasks.Remove(existingTask);
                         await _taskManagementContext.SaveChangesAsync();
                         await transaction.CommitAsync();
+                        return existingTask; // Devuelve la tarea eliminada
                     }
                     else
                     {

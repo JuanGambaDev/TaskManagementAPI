@@ -1,7 +1,10 @@
-﻿namespace TaskManagementAPI;
+﻿using System.Text.Json.Serialization;
+
+namespace TaskManagementAPI;
 
 public class Task
 {
+
     public Guid IdTask {get; set;}
     public string Name {get; set;}
     public string Description {get; set;}
